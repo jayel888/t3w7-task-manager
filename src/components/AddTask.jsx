@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
+import { useTasks } from '../contexts/TaskContext';
 
 const AddTask = () => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [task, setTask] = useState({
+        title: '', description: ''
+    });
 
-    const [tasks, setTasks] = useLocalStorage('tasks', []);
+    const { addTask } = useTasks();
     const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setTask((prev) => ({ ...prev, [name]: value }));
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const newTask = {
-            id: Date.now(),
-            title,
-            description
-        };
-
-        setTasks([...tasks, newTask]);
+        addTask({...task, id: Date.now().toString() });
         navigate('/tasks');
-    }
+    };
 
     return (
         <div>
@@ -28,11 +29,19 @@ const AddTask = () => {
             <form onSubmit={ handleSubmit }>
                 <div>
                     <label>Title: </label>
-                    <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+                    <input 
+                    type='text' 
+                    name='title' 
+                    value={task.title} 
+                    onChange={handleChange} required />
                 </div>
                 <div>
                     <label>Description: </label>
-                    <input value={description} onChange={(e) => setDescription(e.target.value)} required />
+                    <input 
+                    type='textarea' 
+                    name='description' 
+                    value={task.description} 
+                    onChange={handleChange} required />
                 </div>
                 <button type='submit'>Add Task</button>
             </form>
@@ -40,6 +49,4 @@ const AddTask = () => {
     );
 }
     
-    
-
 export default AddTask;
