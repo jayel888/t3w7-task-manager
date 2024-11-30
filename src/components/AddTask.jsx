@@ -37,7 +37,7 @@ const AddTask = () => {
                 </div>
                 <div>
                     <label>Description: </label>
-                    <input 
+                    <textarea 
                     type='textarea' 
                     name='description' 
                     value={task.description} 

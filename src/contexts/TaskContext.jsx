@@ -12,8 +12,23 @@ export default function TaskProvider(props){
     // DeleteTask function
     const deleteTask = (id) => setTasks((prev) => prev.filter((task) => task.id != id))
 
+    // EditTask function
+    const editTask = (updatedTask) => {
+        setTasks((prev) => 
+            prev.map(
+                (task) => (
+                    task.id === updatedTask.id ?
+                    {...task, ...updatedTask} :
+                    task
+                )))
+    } 
+
+    // task.id === updatedTask.id ? 
+        // {...task, ...updatedTask} :
+        // task
+
     return (
-        <TaskContext.Provider value={{tasks, addTask, deleteTask}}>
+        <TaskContext.Provider value={{tasks, addTask, deleteTask, editTask}}>
             {/* const [tasks, setTasks] = setTaskValue(); */}
             {props.children}
         </TaskContext.Provider>
@@ -22,7 +37,7 @@ export default function TaskProvider(props){
 
 // Creating a custom hook!
 export function useTasks() {
-    console.log("Passing data around.");
+    // console.log("Passing data around.");
     let context = useContext(TaskContext);
     if (!context){
         console.log("No Task found.");
